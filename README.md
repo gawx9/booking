@@ -14,7 +14,7 @@ This project utilizes Next.js for the frontend and Express.js for the backend.
 1. Clone the repository:
 
     ```bash
-    git clone [jade resort](https://github.com/gawx9/booking.git)
+    git clone https://github.com/gawx9/booking.git
     ```
 
 2. Navigate to the project directory:
