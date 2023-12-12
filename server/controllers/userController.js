@@ -109,8 +109,7 @@ const deleteUser = async (req, res) => {
 
 const requestReservation = async (req, res) => {
   try {
-    const { roomId } = req.body;
-    console.log(req.body);
+    const { roomId, checkIn, checkOut } = req.body;
 
     // Authorization check
     const token = req.header("Authorization");
@@ -127,8 +126,6 @@ const requestReservation = async (req, res) => {
       // Get user ID from the token
       const userId = user._id;
 
-      console.log(roomId);
-
       // Check if the user exists
       const existingUser = await User.findById(userId);
       if (!existingUser) {
@@ -137,13 +134,17 @@ const requestReservation = async (req, res) => {
 
       // Check if the room exists
       const existingRoom = await Room.findById(roomId);
-
       if (!existingRoom) {
         return res.status(404).json({ message: "Room not found" });
       }
 
       // Create a new reservation
-      const reservation = new Reservation({ user: userId, room: roomId });
+      const reservation = new Reservation({
+        user: userId,
+        room: roomId,
+        checkIn,
+        checkOut,
+      });
       await reservation.save();
 
       // Update user and room with the reservation
