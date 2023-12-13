@@ -14,16 +14,47 @@ import { FiUser, FiChevronDown, FiLogOut } from "react-icons/fi";
 import { TbBrandBooking } from "react-icons/tb";
 import { handleLogout } from "@/utils/logout";
 
-const page = () => {
+const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [bookings, setBookings] = useState([]);
+  const [bookingList, setBookingList] = useState([]);
   const [roomId, setRoomId] = useState(null);
   const [userName, setUserName] = useState("");
+  const [isBookingListOpen, setIsBookingListOpen] = useState(false);
 
   const handleOpenModal = ({ roomId }) => {
     setIsModalOpen(true);
     setRoomId(roomId); // Set roomId in state
+  };
+
+  const handleBookingsClick = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return;
+      }
+
+      const response = await axios.get(
+        "http://localhost:8080/api/reservations-user",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setBookingList(response.data);
+      // console.log("Fetching bookings", response.data);
+      setBookingList(response.data);
+      setIsBookingListOpen(true);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    }
+  };
+  const handleCloseBookingList = () => {
+    setIsBookingListOpen(false);
+    fetchAllBookings();
   };
 
   const handleCloseModal = () => {
@@ -34,30 +65,30 @@ const page = () => {
   const handleLogoutClick = () => {
     handleLogout();
   };
-  useEffect(() => {
-    // Fetch bookings data from the API when the component mounts
-    const fetchBookings = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/rooms");
 
-        setBookings(response.data);
+  // Fetch bookings data from the API when the component mounts
+  const fetchAllBookings = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/rooms");
 
-        const token = localStorage.getItem("token");
+      setBookings(response.data);
 
-        // Decode the token to get user information
-        if (token) {
-          const decodedToken = jwtDecode(token);
-          const { name } = decodedToken; // Assuming 'name' exists in your token payload
-          setUserName(name); // Set the user's name in state
-        }
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const { name } = decodedToken;
+        setUserName(name);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    }
+  };
 
-    fetchBookings();
+  useEffect(() => {
+    fetchAllBookings();
   }, []);
+
   return (
     <div className="container mx-auto mt-8">
       <div className="flex items-center justify-between bg-white">
@@ -80,7 +111,12 @@ const page = () => {
             style={{ originY: "top", translateX: "-50%" }}
             className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden"
           >
-            <Option setOpen={setOpen} Icon={TbBrandBooking} text="Bookings" />
+            <Option
+              setOpen={setOpen}
+              Icon={TbBrandBooking}
+              text="Bookings"
+              handleBookingsClick={handleBookingsClick}
+            />
             <Option
               setOpen={setOpen}
               Icon={FiLogOut}
@@ -93,11 +129,13 @@ const page = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {bookings.map((booking, i) => (
           <div key={i} className="bg-white p-4 rounded-md shadow-md">
-            <img
-              src={`http://localhost:8080/${booking.image}`}
-              alt={`Room ${booking.roomType}`}
-              className="w-full h-40 object-cover rounded-md mb-4"
-            />
+            {booking.image && ( // Conditionally render the image if 'image' property exists
+              <img
+                src={`http://localhost:8080/${booking.image}`}
+                alt={`Room ${booking.roomType}`}
+                className="w-full h-40 object-cover rounded-md mb-4"
+              />
+            )}
             <h3 className="text-xl font-bold mb-2">{booking.roomType}</h3>
             <p className="text-gray-600 mb-4">{booking.description}</p>
             <p className="text-lg font-bold text-blue-500">
@@ -105,7 +143,7 @@ const page = () => {
             </p>
             <button
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-              onClick={() => handleOpenModal({ roomId: booking._id })} // Pass the room ID as an object
+              onClick={() => handleOpenModal({ roomId: booking._id })}
             >
               Book Now
             </button>
@@ -119,11 +157,78 @@ const page = () => {
           handleCloseModal={handleCloseModal}
         />
       )}
+
+      {isBookingListOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+          <div className="bg-white w-full max-w-2xl p-6 rounded-md shadow-md">
+            <h2 className="font-medium text-3xl mb-4 text-gray-500">
+              List Booked Rooms
+            </h2>
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                    Room
+                  </th>
+                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                    Check In
+                  </th>
+                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                    Check Out
+                  </th>
+                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                    Price
+                  </th>
+                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                    Person
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-center text-sm">
+                {bookingList.map((booking, i) => (
+                  <tr
+                    className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}`}
+                    key={i}
+                  >
+                    <td className="py-2 px-4 border-b">
+                      {booking.room.title}{" "}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(booking.checkIn).toLocaleDateString("en-US")}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(booking.checkOut).toLocaleDateString("en-US")}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      ${booking.room.price}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {booking.room.person}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              className="bg-gray-400 text-white px-4 py-1 rounded mt-5"
+              onClick={handleCloseBookingList}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const Option = ({ text, Icon, setOpen, handleLogoutClick }) => {
+const Option = ({
+  text,
+  Icon,
+  setOpen,
+  handleLogoutClick,
+  handleBookingsClick,
+}) => {
   return (
     <motion.li
       variants={itemVariants}
@@ -131,6 +236,8 @@ const Option = ({ text, Icon, setOpen, handleLogoutClick }) => {
         setOpen(false);
         if (text === "Log Out") {
           handleLogoutClick();
+        } else if (text === "Bookings") {
+          handleBookingsClick();
         }
       }}
       className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-indigo-500 transition-colors cursor-pointer"
@@ -142,4 +249,4 @@ const Option = ({ text, Icon, setOpen, handleLogoutClick }) => {
     </motion.li>
   );
 };
-export default page;
+export default Page;

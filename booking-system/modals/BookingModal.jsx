@@ -56,7 +56,7 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
         }
       });
 
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error booking reservation:", error);
       // Handle error (e.g., display an error message to the user)

@@ -33,7 +33,7 @@ const LoginForm = ({ handleCloseLoginForm }) => {
       const { token } = response.data;
 
       localStorage.setItem("token", token);
-      console.log(token);
+      // console.log(token);
 
       Swal.fire({
         icon: "success",
@@ -43,7 +43,7 @@ const LoginForm = ({ handleCloseLoginForm }) => {
         timer: 1500,
       });
       router.push("/booking");
-      console.log("Logged in successfully");
+      // console.log("Logged in successfully");
     } catch (error) {
       // console.log("Authentication error:", error);
       Swal.fire({

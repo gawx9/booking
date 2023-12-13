@@ -1,4 +1,6 @@
 const Reservation = require("../models/Reservation");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User.js");
 
 // Get all reservation
 const getAllReservations = async (req, res) => {
@@ -34,7 +36,43 @@ const deleteReservation = async (req, res) => {
   }
 };
 
+const getReservationsByUserId = async (req, res) => {
+  try {
+    // Authorization check
+    const token = req.header("Authorization");
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Verify the token
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      // Get user ID from the token
+      const userId = user._id;
+
+      // Check if the user exists
+      const existingUser = await User.findById(userId);
+      if (!existingUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Fetch reservations and populate the 'room' field
+      const reservations = await Reservation.find({ user: userId }).populate(
+        "room"
+      );
+
+      res.status(200).json(reservations);
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllReservations,
   deleteReservation,
+  getReservationsByUserId,
 };

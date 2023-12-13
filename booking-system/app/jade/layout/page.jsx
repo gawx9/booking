@@ -2,7 +2,6 @@
 import React from "react";
 import { nav_links } from "@/constants/admin";
 import Link from "next/link";
-
 import Swal from "sweetalert2";
 
 export const handleLogout = () => {

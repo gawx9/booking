@@ -4,7 +4,7 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -105,4 +105,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

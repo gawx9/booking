@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const roomController = require("../controllers/roomController");
+const authenticateJWT = require("../middleware/authMiddleware");
 
 const multer = require("multer");
 
