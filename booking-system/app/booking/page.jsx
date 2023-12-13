@@ -3,6 +3,7 @@ import BookingModal from "@/modals/BookingModal";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import {
   itemVariants,
   actionIconVariants,
@@ -18,6 +19,7 @@ const page = () => {
   const [open, setOpen] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [roomId, setRoomId] = useState(null);
+  const [userName, setUserName] = useState("");
 
   const handleOpenModal = ({ roomId }) => {
     setIsModalOpen(true);
@@ -39,6 +41,15 @@ const page = () => {
         const response = await axios.get("http://localhost:8080/api/rooms");
 
         setBookings(response.data);
+
+        const token = localStorage.getItem("token");
+
+        // Decode the token to get user information
+        if (token) {
+          const decodedToken = jwtDecode(token);
+          const { name } = decodedToken; // Assuming 'name' exists in your token payload
+          setUserName(name); // Set the user's name in state
+        }
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -57,7 +68,7 @@ const page = () => {
             className="flex items-center gap-4 bg-gray-200 cursor-pointer px-4 py-2 rounded"
           >
             <FiUser />
-            <span className="hidden md:block"> John Doe</span>
+            <span className="hidden md:block">{userName}</span>
             <motion.span variants={iconVariants}>
               <FiChevronDown size={25} />
             </motion.span>

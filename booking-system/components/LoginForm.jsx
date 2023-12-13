@@ -33,6 +33,7 @@ const LoginForm = ({ handleCloseLoginForm }) => {
       const { token } = response.data;
 
       localStorage.setItem("token", token);
+      console.log(token);
 
       Swal.fire({
         icon: "success",

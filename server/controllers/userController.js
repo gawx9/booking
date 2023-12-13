@@ -55,9 +55,11 @@ const login = async (req, res) => {
     // Generate JWT token
     const token = jwt.sign(
       { name: user.name, email: user.email, _id: user._id },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
 
+    console.log(token);
     // Include user's name and email in the response
     res.json({
       message: "Login Successful",
@@ -119,10 +121,13 @@ const requestReservation = async (req, res) => {
 
     // Verify the token
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+      console.log("Decoded Token Payload:", user);
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
       }
 
+      // Log the user ID for debugging
+      console.log("User ID from Token:", user._id);
       // Get user ID from the token
       const userId = user._id;
 

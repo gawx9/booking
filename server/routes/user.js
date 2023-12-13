@@ -7,6 +7,6 @@ router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.get("/users", userController.getAllUsers);
 router.delete("/users/:id", userController.deleteUser);
-router.post("/reservation", userController.requestReservation);
+router.post("/reservation", authenticateJWT, userController.requestReservation);
 
 module.exports = router;

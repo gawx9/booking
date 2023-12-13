@@ -68,11 +68,9 @@ const Reservations = () => {
             {reservations.map((reservation, i) => (
               <tr key={i}>
                 <td className="py-2 px-4 border-b">{reservation.user.name}</td>
+                <td className="py-2 px-4 border-b">{reservation.createdAt}</td>
                 <td className="py-2 px-4 border-b">
-                  {reservation.transactionDate}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  ${reservation.totalPrice}
+                  ${reservation.room.price}
                 </td>
                 <td className="py-2 px-4 border-b">{reservation.status}</td>
                 <td className="py-2 px-4 border-b">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MdClose } from "react-icons/md";
@@ -9,12 +9,13 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
   const [checkOutDate, setCheckOutDate] = useState(null);
   console.log(roomId);
 
-  const token = localStorage.getItem("token");
-  console.log(token);
+  // const token = localStorage.getItem("token");
+  // console.log(token);
   const handleBookNow = async () => {
     try {
       // Get the token from local storage
       const token = localStorage.getItem("token");
+      console.log("Token from Local Storage:", token);
 
       if (!token) {
         console.error("Authorization token not found");
