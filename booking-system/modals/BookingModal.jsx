@@ -1,53 +1,65 @@
+"use client";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MdClose } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const BookingModal = ({ handleCloseModal, roomId }) => {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
-  console.log(roomId);
 
-  // const token = localStorage.getItem("token");
-  // console.log(token);
   const handleBookNow = async () => {
     try {
-      // Get the token from local storage
       const token = localStorage.getItem("token");
-      console.log("Token from Local Storage:", token);
-
       if (!token) {
-        console.error("Authorization token not found");
-        // Handle unauthorized access, redirect, or show an error message
         return;
       }
 
-      // Make a request to the reservation API with the authorization header
+      const reservationData = {
+        roomId,
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+      };
+
       const response = await axios.post(
         "http://localhost:8080/api/reservation",
-        {
-          roomId,
-          checkInDate,
-          checkOutDate,
-        },
+        reservationData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
           },
         }
       );
 
-      console.log("Reservation requested successfully:", response.data);
-      handleCloseModal();
-    } catch (error) {
-      console.error("Error requesting reservation:", error);
+      // Display a confirmation dialog before closing the modal
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, book it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Display a success message if the user confirms the action
+          Swal.fire({
+            title: "Booked!",
+            text: "Your reservation has been confirmed.",
+            icon: "success",
+          });
 
-      // Check if the error response contains a message
-      const errorMessage =
-        error.response?.data?.message || "An error occurred.";
-      // Display the error message to the user (you can implement your own error handling UI)
-      alert(errorMessage);
+          // Close the modal after success
+          handleCloseModal();
+        }
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error booking reservation:", error);
+      // Handle error (e.g., display an error message to the user)
     }
   };
 

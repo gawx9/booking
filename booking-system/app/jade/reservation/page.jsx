@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../layout/page";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);
@@ -22,13 +23,38 @@ const Reservations = () => {
     fetchTransaction();
   }, []);
 
-  const handleDelete = (reservationId) => {
-    const updatedReservations = reservations.filter(
-      (reservation) => reservation.id !== reservationId
-    );
-    setReservations(updatedReservations);
-  };
+  const handleDelete = async (reservationId) => {
+    try {
+      // Send a request to delete the reservation
+      await axios.delete(
+        `http://localhost:8080/api/reservations/${reservationId}`
+      );
 
+      // Update the state by filtering out the deleted reservation
+      const updatedReservations = reservations.filter(
+        (reservation) => reservation.id !== reservationId
+      );
+      setReservations(updatedReservations);
+
+      // Show a success message
+      Swal.fire({
+        icon: "success",
+        title: "Reservation deleted successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      fetchTransaction();
+    } catch (error) {
+      // Handle the error (show an error message or log it)
+      console.error("Error deleting reservation:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error deleting reservation",
+        text: "An error occurred while deleting the reservation.",
+      });
+    }
+  };
   const handleConfirm = (reservationId) => {
     const updatedReservations = reservations.map((reservation) =>
       reservation.id === reservationId
@@ -58,6 +84,9 @@ const Reservations = () => {
           <thead>
             <tr>
               <th className="py-2 px-4 border-b">Name</th>
+              <th className="py-2 px-4 border-b">Check In</th>
+              <th className="py-2 px-4 border-b">Check Out</th>
+
               <th className="py-2 px-4 border-b">Transaction Date</th>
               <th className="py-2 px-4 border-b">Total Price</th>
               <th className="py-2 px-4 border-b">Status</th>
@@ -68,7 +97,16 @@ const Reservations = () => {
             {reservations.map((reservation, i) => (
               <tr key={i}>
                 <td className="py-2 px-4 border-b">{reservation.user.name}</td>
-                <td className="py-2 px-4 border-b">{reservation.createdAt}</td>
+                <td className="py-2 px-4 border-b">
+                  {new Date(reservation.checkIn).toLocaleDateString("en-US")}
+                </td>
+
+                <td className="py-2 px-4 border-b">
+                  {new Date(reservation.checkOut).toLocaleDateString("en-US")}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {new Date(reservation.createdAt).toLocaleDateString("en-US")}
+                </td>
                 <td className="py-2 px-4 border-b">
                   ${reservation.room.price}
                 </td>
@@ -92,7 +130,7 @@ const Reservations = () => {
                   )}
                   <button
                     className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 mr-2"
-                    onClick={() => handleDelete(reservation.id)}
+                    onClick={() => handleDelete(reservation._id)}
                   >
                     Delete
                   </button>
