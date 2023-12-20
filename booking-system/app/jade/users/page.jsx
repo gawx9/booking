@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../layout/page";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -28,9 +29,39 @@ const Users = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/users/${userId}`);
+      // Display a confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
 
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+      if (result.isConfirmed) {
+        // Make API call to delete the user
+        await axios.delete(`http://localhost:8080/api/users/${userId}`);
+
+        // Display a success message if the user confirms the action
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Room deleted successfully",
+          icon: "success",
+        });
+
+        // Update state by removing the deleted user
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user._id !== userId)
+        );
+
+        // Fetch updated users
+        fetchUsers();
+      } else {
+        // Handle case where user cancels the deletion
+        Swal.fire("Cancelled", "Room deletion cancelled", "info");
+      }
     } catch (error) {
       console.log("Error deleting user", error);
     }

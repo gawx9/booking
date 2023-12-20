@@ -3,16 +3,26 @@ import React, { useEffect, useState } from "react";
 import Layout from "../layout/page";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ReservationModal from "@/modals/ReservationModal";
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);
+  const [selectedReservation, setSelectedReservation] = useState(null);
+
+  const handleView = (reservation) => {
+    setSelectedReservation(reservation);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedReservation(null);
+  };
 
   const fetchTransaction = async () => {
     try {
       const response = await axios.get(
         "http://localhost:8080/api/reservations"
       );
-      console.log("Response Data", response.data);
+      // console.log("Response Data", response.data);
       setReservations(response.data);
     } catch (error) {
       console.log("Error fetching users", error);
@@ -134,12 +144,27 @@ const Reservations = () => {
                   >
                     Delete
                   </button>
+
+                  <button
+                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700 mr-2"
+                    onClick={() => handleView(reservation)}
+                  >
+                    View
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Render the modal when a reservation is selected */}
+      {selectedReservation && (
+        <ReservationModal
+          reservation={selectedReservation}
+          onClose={handleCloseModal}
+        />
+      )}
     </Layout>
   );
 };

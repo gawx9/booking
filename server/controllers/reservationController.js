@@ -71,8 +71,44 @@ const getReservationsByUserId = async (req, res) => {
   }
 };
 
+// Confirm reservation controller method
+const confirmReservation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const reservation = await Reservation.findByIdAndUpdate(
+      id,
+      { status: "Confirmed" },
+      { new: true }
+    );
+
+    res.json(reservation);
+  } catch (error) {
+    res.status(500).json({ message: "Error confirming reservation" });
+  }
+};
+
+// Cancel reservation controller method
+const cancelReservation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const reservation = await Reservation.findByIdAndUpdate(
+      id,
+      { status: "Canceled" },
+      { new: true }
+    );
+
+    res.json(reservation);
+  } catch (error) {
+    res.status(500).json({ message: "Error canceling reservation" });
+  }
+};
+
 module.exports = {
   getAllReservations,
   deleteReservation,
   getReservationsByUserId,
+  confirmReservation,
+  cancelReservation,
 };

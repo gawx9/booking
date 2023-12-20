@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../layout/page";
 import axios from "axios";
-
+import Swal from "sweetalert2";
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -16,18 +16,44 @@ const Rooms = () => {
 
   const handleDelete = async (roomId) => {
     try {
-      // Make API call to delete the room
-      await axios.delete(`http://localhost:8080/api/rooms/${roomId}`);
-      console.log(`Room deleted successfully`);
+      // Display a confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
 
-      // Update state by removing the deleted room
-      setRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
+      if (result.isConfirmed) {
+        // Make API call to delete the room
+        await axios.delete(`http://localhost:8080/api/rooms/${roomId}`);
 
-      fetchRooms();
+        // Display a success message if the user confirms the action
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Room deleted successfully",
+          icon: "success",
+        });
+
+        // Update state by removing the deleted room
+        setRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
+
+        // Fetch updated rooms
+        fetchRooms();
+      } else {
+        // Handle case where user cancels the deletion
+        Swal.fire("Cancelled", "Room deletion cancelled", "info");
+      }
     } catch (error) {
       console.error("Error deleting a room:", error);
+      // Display an error message
+      Swal.fire("Error", "An error occurred while deleting the room", "error");
     }
   };
+
   const fetchRooms = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/rooms");

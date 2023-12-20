@@ -10,4 +10,9 @@ router.delete("/reservations/:id", reservationController.deleteReservation);
 // Define the route to get reservations by user _id
 router.get("/reservations-user", reservationController.getReservationsByUserId);
 
+// Confirm reservation
+router.put("/:id/confirm", reservationController.confirmReservation);
+
+// Cancel reservation
+router.put("/:id/cancel", reservationController.cancelReservation);
 module.exports = router;
