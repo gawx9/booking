@@ -21,7 +21,7 @@ const register = async (req, res) => {
     await user.save();
 
     const token = jwt.sign(
-      { email: user.email, _id: user._id },
+      { email: user.email, _id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET
     );
 
@@ -54,7 +54,12 @@ const login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { name: user.name, email: user.email, _id: user._id },
+      {
+        name: user.name,
+        email: user.email,
+        _id: user._id,
+        isAdmin: user.isAdmin,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -67,6 +72,7 @@ const login = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
+        isAdmin: user.isAdmin,
       },
     });
   } catch (error) {

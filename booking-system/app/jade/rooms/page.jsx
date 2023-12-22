@@ -143,7 +143,7 @@ const Rooms = () => {
 
   return (
     <Layout>
-      <div className="py-8 text-sm">
+      <div className="py-8 text-sm whitespace-nowrap">
         <div className="flex justify-between">
           <h1 className="text-3xl font-medium text-gray-700">Lists of Rooms</h1>
           <button
@@ -153,47 +153,48 @@ const Rooms = () => {
             Add Room
           </button>
         </div>
-
-        <table className="min-w-full bg-white border border-gray-300 mt-4">
-          <thead className="text-sm">
-            <tr>
-              <th className="py-2 px-4 border-b">Image</th>
-              <th className="py-2 px-4 border-b">Title</th>
-              <th className="py-2 px-4 border-b">Accommodation</th>
-              <th className="py-2 px-4 border-b">Persons</th>
-              <th className="py-2 px-4 border-b">Price</th>
-              <th className="py-2 px-4 border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-center">
-            {rooms.map((room, i) => (
-              <tr
-                key={i}
-                className={`${i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"}`}
-              >
-                <td className="py-2 px-4 border-b flex items-center justify-center">
-                  <img
-                    src={`http://localhost:8080/${room.image}`}
-                    alt={room.title}
-                    className="h-10 w-10 object-cover"
-                  />
-                </td>
-                <td className="py-2 px-4 border-b">{room.title}</td>
-                <td className="py-2 px-4 border-b">{room.accommodation}</td>
-                <td className="py-2 px-4 border-b">{room.person}</td>
-                <td className="py-2 px-4 border-b">${room.price}</td>
-                <td className="py-2 px-4 border-b">
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
-                    onClick={() => handleDelete(room._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-300 mt-4">
+            <thead className="text-sm">
+              <tr>
+                <th className="py-2 px-4 border-b">Image</th>
+                <th className="py-2 px-4 border-b">Title</th>
+                <th className="py-2 px-4 border-b">Accommodation</th>
+                <th className="py-2 px-4 border-b">Persons</th>
+                <th className="py-2 px-4 border-b">Price</th>
+                <th className="py-2 px-4 border-b">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="text-center">
+              {rooms.map((room, i) => (
+                <tr
+                  key={i}
+                  className={`${i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"}`}
+                >
+                  <td className="py-2 px-4 border-b flex items-center justify-center">
+                    <img
+                      src={`http://localhost:8080/${room.image}`}
+                      alt={room.title}
+                      className="h-10 w-10 object-cover"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">{room.title}</td>
+                  <td className="py-2 px-4 border-b">{room.accommodation}</td>
+                  <td className="py-2 px-4 border-b">{room.person}</td>
+                  <td className="py-2 px-4 border-b">${room.price}</td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
+                      onClick={() => handleDelete(room._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {showModal && (

@@ -111,6 +111,7 @@ const Page = () => {
             style={{ originY: "top", translateX: "-50%" }}
             className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden"
           >
+            <Option setOpen={setOpen} Icon={FiUser} text={userName} />
             <Option
               setOpen={setOpen}
               Icon={TbBrandBooking}
@@ -164,51 +165,55 @@ const Page = () => {
             <h2 className="font-medium text-3xl mb-4 text-gray-500">
               List Booked Rooms
             </h2>
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                    Room
-                  </th>
-                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                    Check In
-                  </th>
-                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                    Check Out
-                  </th>
-                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                    Price
-                  </th>
-                  <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                    Person
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-center text-sm">
-                {bookingList.map((booking, i) => (
-                  <tr
-                    className={`${i % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}`}
-                    key={i}
-                  >
-                    <td className="py-2 px-4 border-b">
-                      {booking.room.title}{" "}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {new Date(booking.checkIn).toLocaleDateString("en-US")}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {new Date(booking.checkOut).toLocaleDateString("en-US")}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      ${booking.room.price}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {booking.room.person}
-                    </td>
+            <div className="overflow-x-auto text-sm whitespace-nowrap">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                      Room
+                    </th>
+                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                      Check In
+                    </th>
+                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                      Check Out
+                    </th>
+                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                      Price
+                    </th>
+                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                      Person
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="text-center text-sm">
+                  {bookingList.map((booking, i) => (
+                    <tr
+                      className={`${
+                        i % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
+                      }`}
+                      key={i}
+                    >
+                      <td className="py-2 px-4 border-b">
+                        {booking.room.title}{" "}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {new Date(booking.checkIn).toLocaleDateString("en-US")}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {new Date(booking.checkOut).toLocaleDateString("en-US")}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        ${booking.room.price}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {booking.room.person}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <button
               className="bg-gray-400 text-white px-4 py-1 rounded mt-5"
               onClick={handleCloseBookingList}

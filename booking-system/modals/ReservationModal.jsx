@@ -14,7 +14,7 @@ const ReservationModal = ({ reservation, onClose }) => {
           <div className="bg-white p-12">
             <h2 className="text-2xl font-medium py-8">Jade Garden Resort</h2>
 
-            <div className="flex items-center justify-between  text-sm text-gray-400">
+            <div className="md:flex items-center justify-between  text-sm text-gray-400 ">
               <div>
                 <p className="">From</p>
                 <p>Jade Garden Resort</p>
@@ -24,44 +24,55 @@ const ReservationModal = ({ reservation, onClose }) => {
                 </p>
               </div>
 
-              <div>
+              <div className="py-10 md:py-0">
                 <p>To</p>
                 <p>{reservation.user.name}</p>
                 <p>{reservation.user.email}</p>
               </div>
             </div>
 
-            <table className="min-w-full bg-white border border-gray-300 mt-4 text-sm">
-              <thead>
-                <tr>
-                  <th className="py-2 px-4 border-b">Check In</th>
-                  <th className="py-2 px-4 border-b">Check Out</th>
+            <div style={{ overflowX: "auto" }} className=" whitespace-nowrap">
+              <table className="w-full bg-white border border-gray-300 mt-4 text-sm">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b">Room</th>
+                    <th className="py-2 px-4 border-b">Check In</th>
+                    <th className="py-2 px-4 border-b">Check Out</th>
 
-                  <th className="py-2 px-4 border-b">Transaction Date</th>
-                  <th className="py-2 px-4 border-b">Total Price</th>
-                </tr>
-              </thead>
-              <tbody className="text-center">
-                <tr>
-                  <td className="py-2 px-4 border-b">
-                    {new Date(reservation.checkIn).toLocaleDateString("en-US")}
-                  </td>
+                    <th className="py-2 px-4 border-b">Transaction Date</th>
+                    <th className="py-2 px-4 border-b">Total Price</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center">
+                  <tr>
+                    <td className="py-2 px-4 border-b">
+                      {reservation.room.title}
+                    </td>
 
-                  <td className="py-2 px-4 border-b">
-                    {new Date(reservation.checkOut).toLocaleDateString("en-US")}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {new Date(reservation.createdAt).toLocaleDateString(
-                      "en-US"
-                    )}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    ${reservation.room.price}
-                  </td>
-                  <td className="py-2 px-4 border-b">{reservation.status}</td>
-                </tr>
-              </tbody>
-            </table>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(reservation.checkIn).toLocaleDateString(
+                        "en-US"
+                      )}
+                    </td>
+
+                    <td className="py-2 px-4 border-b">
+                      {new Date(reservation.checkOut).toLocaleDateString(
+                        "en-US"
+                      )}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(reservation.createdAt).toLocaleDateString(
+                        "en-US"
+                      )}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      ${reservation.room.price}
+                    </td>
+                    <td className="py-2 px-4 border-b">{reservation.status}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Modal footer with buttons */}
