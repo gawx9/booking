@@ -25,22 +25,26 @@ const Page = () => {
   const [roomId, setRoomId] = useState(null);
   const [userName, setUserName] = useState("");
   const [isBookingListOpen, setIsBookingListOpen] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
+  const [notificationShown, setNotificationShown] = useState(false);
+
   const router = useRouter();
-
   const notify = () => {
-    toast.success("Your booking has been approved!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
+    if (!notificationShown) {
+      toast.success("Your booking has been approved!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
 
+      // Set the notificationShown state to true to prevent showing the notification again
+      setNotificationShown(true);
+    }
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -72,7 +76,7 @@ const Page = () => {
       );
 
       setBookingList(response.data);
-      console.log("Fetching bookings", response.data);
+      // console.log("Fetching bookings", response.data);
       setBookingList(response.data);
       setIsBookingListOpen(true);
     } catch (error) {
@@ -118,7 +122,6 @@ const Page = () => {
 
   return (
     <div className="container mx-auto mt-8">
-      <button onClick={notify}>notify</button>
       <ToastContainer />
       <div className="flex items-center justify-between bg-white">
         <h2 className="text-lg md:text-3xl font-bold">Available Bookings</h2>
