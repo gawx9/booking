@@ -13,6 +13,9 @@ import {
 import { FiUser, FiChevronDown, FiLogOut } from "react-icons/fi";
 import { TbBrandBooking } from "react-icons/tb";
 import { handleLogout } from "@/utils/logout";
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +25,30 @@ const Page = () => {
   const [roomId, setRoomId] = useState(null);
   const [userName, setUserName] = useState("");
   const [isBookingListOpen, setIsBookingListOpen] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const router = useRouter();
 
+  const notify = () => {
+    toast.success("Your booking has been approved!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to the admin panel if the user is no token in local storage
+      router.push("/");
+    }
+    // console.log(token);
+  }, []);
   const handleOpenModal = ({ roomId }) => {
     setIsModalOpen(true);
     setRoomId(roomId); // Set roomId in state
@@ -44,8 +70,9 @@ const Page = () => {
           },
         }
       );
+
       setBookingList(response.data);
-      // console.log("Fetching bookings", response.data);
+      console.log("Fetching bookings", response.data);
       setBookingList(response.data);
       setIsBookingListOpen(true);
     } catch (error) {
@@ -91,6 +118,8 @@ const Page = () => {
 
   return (
     <div className="container mx-auto mt-8">
+      <button onClick={notify}>notify</button>
+      <ToastContainer />
       <div className="flex items-center justify-between bg-white">
         <h2 className="text-lg md:text-3xl font-bold">Available Bookings</h2>
         <motion.div animate={open ? "open" : "closed"} className="relative">
@@ -127,30 +156,37 @@ const Page = () => {
           </motion.ul>
         </motion.div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {bookings.map((booking, i) => (
-          <div key={i} className="bg-white p-4 rounded-md shadow-md">
-            {booking.image && ( // Conditionally render the image if 'image' property exists
-              <img
-                src={`http://localhost:8080/${booking.image}`}
-                alt={`Room ${booking.roomType}`}
-                className="w-full h-40 object-cover rounded-md mb-4"
-              />
-            )}
-            <h3 className="text-xl font-bold mb-2">{booking.roomType}</h3>
-            <p className="text-gray-600 mb-4">{booking.description}</p>
-            <p className="text-lg font-bold text-blue-500">
-              ${booking.price}/night
-            </p>
-            <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-              onClick={() => handleOpenModal({ roomId: booking._id })}
-            >
-              Book Now
-            </button>
-          </div>
-        ))}
-      </div>
+
+      {bookings.length === 0 ? (
+        <p className="text-center pt-24 text-red-500 text-md">
+          No Rooms Available right now.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {bookings.map((booking, i) => (
+            <div key={i} className="bg-white p-4 rounded-md shadow-md">
+              {booking.image && ( // Conditionally render the image if 'image' property exists
+                <img
+                  src={`http://localhost:8080/${booking.image}`}
+                  alt={`Room ${booking.roomType}`}
+                  className="w-full h-40 object-cover rounded-md mb-4"
+                />
+              )}
+              <h3 className="text-xl font-bold mb-2">{booking.roomType}</h3>
+              <p className="text-gray-600 mb-4">{booking.description}</p>
+              <p className="text-lg font-bold text-blue-500">
+                ${booking.price}/night
+              </p>
+              <button
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={() => handleOpenModal({ roomId: booking._id })}
+              >
+                Book Now
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {isModalOpen && (
         <BookingModal
@@ -162,57 +198,85 @@ const Page = () => {
       {isBookingListOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
           <div className="bg-white w-full max-w-2xl p-6 rounded-md shadow-md">
-            <h2 className="font-medium text-3xl mb-4 text-gray-500">
+            <h2 className="font-medium text-3xl mb-2 text-gray-500">
               List Booked Rooms
             </h2>
             <div className="overflow-x-auto text-sm whitespace-nowrap">
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                      Room
-                    </th>
-                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                      Check In
-                    </th>
-                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                      Check Out
-                    </th>
-                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                      Price
-                    </th>
-                    <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
-                      Person
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-center text-sm">
-                  {bookingList.map((booking, i) => (
-                    <tr
-                      className={`${
-                        i % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
-                      }`}
-                      key={i}
-                    >
-                      <td className="py-2 px-4 border-b">
-                        {booking.room.title}{" "}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {new Date(booking.checkIn).toLocaleDateString("en-US")}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {new Date(booking.checkOut).toLocaleDateString("en-US")}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        ${booking.room.price}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {booking.room.person}
-                      </td>
+              {bookingList.length === null ? (
+                <p>Loading....</p>
+              ) : bookingList.length === 0 ? (
+                <p className="text-center py-5">No Lists of Bookings</p>
+              ) : (
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Room
+                      </th>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Check In
+                      </th>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Check Out
+                      </th>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Price
+                      </th>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Person
+                      </th>
+                      <th className="py-2 px-4 border-b font-medium text-md text-gray-500">
+                        Status
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="text-center text-sm ">
+                    {bookingList.map((booking, i) => (
+                      <tr
+                        className={`${
+                          i % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
+                        }`}
+                        key={i}
+                      >
+                        <td className="py-2 px-4 border-b">
+                          {booking.room.title}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          {new Date(booking.checkIn).toLocaleDateString(
+                            "en-US"
+                          )}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          {new Date(booking.checkOut).toLocaleDateString(
+                            "en-US"
+                          )}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          ${booking.room.price}
+                        </td>
+                        <td className="py-2 px-4 border-b">
+                          {booking.room.person}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b ${
+                            booking.status === "Pending"
+                              ? "text-yellow-500"
+                              : booking.status === "Approved"
+                              ? "text-green-500"
+                              : booking.status === "Canceled"
+                              ? "text-red-500"
+                              : ""
+                          }`}
+                        >
+                          {booking.status}
+                        </td>
+
+                        <td>{booking.status === "Approved" && notify()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
             <button
               className="bg-gray-400 text-white px-4 py-1 rounded mt-5"

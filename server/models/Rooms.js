@@ -6,6 +6,7 @@ const roomSchema = new mongoose.Schema({
   accommodation: { type: Number, required: true },
   person: { type: Number, required: true },
   price: { type: Number, required: true },
+
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reservation" }],
 });
 

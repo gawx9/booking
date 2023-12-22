@@ -1,5 +1,5 @@
-import React from "react";
 import Layout from "../layout/page";
+
 const Admin = () => {
   return (
     <Layout>

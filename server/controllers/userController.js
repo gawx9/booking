@@ -64,7 +64,7 @@ const login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    console.log(token);
+    // console.log(token);
     // Include user's name and email in the response
     res.json({
       message: "Login Successful",

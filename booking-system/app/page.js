@@ -36,6 +36,7 @@ export default function Home() {
         handleCloseLoginForm={handleCloseLoginForm}
         openRegisterForm={openRegisterForm}
         handleCloseRegisterForm={handleCloseRegisterForm}
+        setOpenRegisterForm={setOpenRegisterForm}
       />
       <About />
       <Services />

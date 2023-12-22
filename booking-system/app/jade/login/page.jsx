@@ -29,7 +29,7 @@ const Page = () => {
         formData
       );
 
-      const { token } = response.data;
+      const { token, user } = response.data;
 
       localStorage.setItem("token", token);
 
@@ -40,14 +40,26 @@ const Page = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.push("/jade/admin");
+      if (user.isAdmin) {
+        // Redirect to the admin panel if the user is an admin
+        router.push("/jade/admin");
+      } else {
+        // Handle non-admin user login logic
+        Swal.fire({
+          icon: "error",
+          title: "Forbidden",
+          text: "Only admin user can login",
+          showConfirmButton: true,
+        });
+      }
       // console.log("Logged in successfully");
     } catch (error) {
-      // console.log("Authentication error:", error);
+      console.log("Authentication error:", error);
+      // Handle non-admin user login logic
       Swal.fire({
         icon: "error",
-        title: "Login Failed",
-        text: "Invalid email or password",
+        title: "Forbidden",
+        text: "Only admin user can login",
         showConfirmButton: true,
       });
     }

@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { nav_links } from "@/constants/admin";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import Access from "@/modals/Access";
 
 export const handleLogout = () => {
   Swal.fire({
@@ -26,12 +27,18 @@ export const handleLogout = () => {
 
 const Layout = ({ children }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [haveToken, setHaveToken] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setHaveToken(token);
+    // console.log(token);
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
 
-  return (
+  return haveToken ? (
     <div>
       <div className="bg-gray-500">
         <div className="flex items-center justify-between p-4">
@@ -47,6 +54,13 @@ const Layout = ({ children }) => {
                   </li>
                 </Link>
               ))}
+
+              <li
+                className="px-4 py-2 cursor-pointer text-white"
+                onClick={handleLogout}
+              >
+                Logout
+              </li>
             </ul>
           </div>
 
@@ -71,6 +85,7 @@ const Layout = ({ children }) => {
                   </li>
                 </Link>
               ))}
+
               <li
                 className="px-4 py-2 cursor-pointer text-white"
                 onClick={handleLogout}
@@ -84,6 +99,8 @@ const Layout = ({ children }) => {
 
       {children}
     </div>
+  ) : (
+    <Access />
   );
 };
 

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Swal from "sweetalert2";
 import axios from "axios";
-const RegisterForm = ({ handleCloseRegisterForm }) => {
+const RegisterForm = ({ handleCloseRegisterForm, setOpenRegisterForm }) => {
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -28,6 +28,8 @@ const RegisterForm = ({ handleCloseRegisterForm }) => {
         showConfirmButton: false,
         timer: 1500,
       });
+
+      setOpenRegisterForm(false);
     } catch (error) {
       console.log("Error adding user", error);
       Swal.fire({

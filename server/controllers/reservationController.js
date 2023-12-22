@@ -1,6 +1,7 @@
 const Reservation = require("../models/Reservation");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
+const io = require("socket.io");
 
 // Get all reservation
 const getAllReservations = async (req, res) => {
@@ -78,7 +79,7 @@ const confirmReservation = async (req, res) => {
   try {
     const reservation = await Reservation.findByIdAndUpdate(
       id,
-      { status: "Confirmed" },
+      { status: "Approved", message: "Your booking has been approved" },
       { new: true }
     );
 

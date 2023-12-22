@@ -6,6 +6,9 @@ const reservationSchema = new mongoose.Schema(
     room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
     checkIn: { type: Date, required: true },
     checkOut: { type: Date, required: true },
+    status: { type: String, default: "Pending" },
+    message: { type: String, default: "" },
+
     date: { type: Date, default: Date.now },
   },
   {

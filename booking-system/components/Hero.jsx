@@ -8,6 +8,7 @@ const Hero = ({
   handleCloseLoginForm,
   handleCloseRegisterForm,
   handleOpenLoginForm,
+  setOpenRegisterForm,
 }) => {
   return (
     <div
@@ -45,6 +46,7 @@ const Hero = ({
             <div className="w-full max-w-3xl px-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
               <RegisterForm
                 openRegisterForm={openRegisterForm}
+                setOpenRegisterForm={setOpenRegisterForm}
                 handleCloseRegisterForm={handleCloseRegisterForm}
               />
             </div>

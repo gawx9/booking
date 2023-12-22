@@ -1,3 +1,5 @@
+import Approved from "/public/approved.png";
+import Image from "next/image";
 const ReservationModal = ({ reservation, onClose }) => {
   return (
     <div className="fixed inset-0 overflow-y-auto">
@@ -12,7 +14,9 @@ const ReservationModal = ({ reservation, onClose }) => {
         <div className="w-full max-w-3xl align-bottom bg-white rounded-lg  transform transition-all">
           {/* Modal content with reservation details */}
           <div className="bg-white p-12">
-            <h2 className="text-2xl font-medium py-8">Jade Garden Resort</h2>
+            <h2 className="text-2xl font-semibold text-gray-600 py-8">
+              Ja<span className="text-blue-400">De</span> Garden Resort
+            </h2>
 
             <div className="md:flex items-center justify-between  text-sm text-gray-400 ">
               <div>
@@ -29,6 +33,16 @@ const ReservationModal = ({ reservation, onClose }) => {
                 <p>{reservation.user.name}</p>
                 <p>{reservation.user.email}</p>
               </div>
+
+              {reservation.status === "Approved" && (
+                <Image
+                  src={Approved}
+                  alt="Approved"
+                  width={100}
+                  height={100}
+                  priority={true}
+                />
+              )}
             </div>
 
             <div style={{ overflowX: "auto" }} className=" whitespace-nowrap">
@@ -68,7 +82,6 @@ const ReservationModal = ({ reservation, onClose }) => {
                     <td className="py-2 px-4 border-b">
                       ${reservation.room.price}
                     </td>
-                    <td className="py-2 px-4 border-b">{reservation.status}</td>
                   </tr>
                 </tbody>
               </table>
