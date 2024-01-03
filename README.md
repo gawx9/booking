@@ -56,6 +56,10 @@ This project utilizes Next.js for the frontend and Express.js for the backend.
     npm install
     npm run dev
     ```
+    
+### URL Setup
+- For Client (http://localhost:3000)
+- For Admin (http://localhost:3000/jade/login)
 
 ## Project Structure
 
