@@ -14,10 +14,28 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password });
 
-    const user = new User({ name, email, password: hashedPassword });
+    // Validate the user object
+    const validationError = user.validateSync();
+    if (validationError) {
+      const errorMessages = Object.values(validationError.errors).map(
+        (err) => err.message
+      );
+
+      // Check if the error is related to the password field
+      if (errorMessages.some((msg) => msg.includes("password"))) {
+        return res.status(400).json({ message: "Password is required" });
+      }
+
+      console.log("Validation Error: ", errorMessages);
+      return res.status(400).json({ message: errorMessages.join(", ") });
+    }
+
+    // Hash the password
+    user.password = await bcrypt.hash(password, 10);
+
+    // Save the user
     await user.save();
 
     const token = jwt.sign(
@@ -29,9 +47,11 @@ const register = async (req, res) => {
       .status(201)
       .json({ message: "Registration successfully", token: token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
+
 // Login
 const login = async (req, res) => {
   try {

@@ -3,7 +3,7 @@ const Room = require("../models/Rooms");
 // add room
 const addRoom = async (req, res) => {
   try {
-    const { title, accommodation, person, price } = req.body;
+    const { title, description, accommodation, person, price } = req.body;
 
     // Get the paths of the uploaded images
     const image = req.files.map((file) => file.path);
@@ -11,6 +11,7 @@ const addRoom = async (req, res) => {
     const room = new Room({
       image,
       title,
+      description,
       accommodation,
       person,
       price,
@@ -19,6 +20,15 @@ const addRoom = async (req, res) => {
 
     res.status(201).json({ message: "Room added successfully" });
   } catch (error) {
+    if (error.name === "ValidationError") {
+      const errorMessages = Object.values(error.errors).map(
+        (err) => err.message
+      );
+      console.log("Validation Error: ", errorMessages);
+
+      return res.status(400).json({ message: errorMessages.join(", ") });
+    }
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

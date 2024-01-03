@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 
 const roomSchema = new mongoose.Schema({
   image: { type: [String], required: true },
-  title: { type: String, required: true },
-  accommodation: { type: Number, required: true },
-  person: { type: Number, required: true },
-  price: { type: Number, required: true },
+  title: { type: String, required: [true, "Title is required"] },
+  description: { type: String, required: [true, "Description is required"] },
+  accommodation: { type: Number, required: [true, "Accomodation is required"] },
+  person: { type: Number, required: [true, "Person is required"] },
+  price: { type: Number, required: [true, "Price is required"] },
 
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reservation" }],
 });
