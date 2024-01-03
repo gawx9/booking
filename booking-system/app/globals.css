@@ -72,3 +72,9 @@ html {
 .signup-link a {
   text-decoration: underline;
 }
+
+@media print {
+  #printPageButton {
+    display: none;
+  }
+}

@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import Layout from "../layout/page";
 import axios from "axios";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
   const [newRoom, setNewRoom] = useState({
     title: "",
+    description: "",
     accommodation: "",
     person: "",
     price: "",
@@ -58,7 +61,7 @@ const Rooms = () => {
     try {
       const response = await axios.get("http://localhost:8080/api/rooms");
       // console.log("Response Data after adding a room:", response.data);
-
+      // console.log(response.data);
       setRooms(response.data);
     } catch (error) {
       console.log("Error fetching rooms", error);
@@ -71,6 +74,7 @@ const Rooms = () => {
     try {
       const formData = new FormData();
       formData.append("title", newRoom.title);
+      formData.append("description", newRoom.description);
       formData.append("accommodation", newRoom.accommodation);
       formData.append("person", newRoom.person);
       formData.append("price", newRoom.price);
@@ -87,13 +91,11 @@ const Rooms = () => {
       );
 
       if (response.status === 201) {
-        console.log("Room added successfully");
-        console.log("Response Data after adding a room:", response.data);
-
+        toast.success(response.data.message);
         // Assuming response.data contains the room details
         setRooms((prevRooms) => [...prevRooms, response.data]);
         handleCloseModal();
-
+        setError("");
         fetchRooms();
       } else {
         console.error(
@@ -103,6 +105,7 @@ const Rooms = () => {
       }
     } catch (error) {
       console.error("Error adding room", error);
+      setError(error.response.data.message);
     }
   };
 
@@ -128,8 +131,10 @@ const Rooms = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setError("");
     setNewRoom({
       title: "",
+      description: "",
       accommodation: "",
       person: "",
       price: "",
@@ -187,7 +192,10 @@ const Rooms = () => {
                     <td className="py-2 px-4 border-b">{room.title}</td>
                     <td className="py-2 px-4 border-b">{room.accommodation}</td>
                     <td className="py-2 px-4 border-b">{room.person}</td>
-                    <td className="py-2 px-4 border-b">${room.price}</td>
+                    <td className="py-2 px-4 border-b">
+                      ₱ {""}
+                      {room.price}
+                    </td>
                     <td className="py-2 px-4 border-b">
                       <button
                         className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
@@ -222,7 +230,22 @@ const Rooms = () => {
                   value={newRoom.title}
                   onChange={handleInputChange}
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="description"
+                  className="block text-gray-700 font-medium"
+                >
+                  Description
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  value={newRoom.description}
+                  onChange={handleInputChange}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                 />
               </div>
               <div className="mb-4">
@@ -238,7 +261,6 @@ const Rooms = () => {
                   value={newRoom.accommodation}
                   onChange={handleInputChange}
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
                 />
               </div>
               <div className="mb-4">
@@ -254,7 +276,6 @@ const Rooms = () => {
                   value={newRoom.person}
                   onChange={handleInputChange}
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
                 />
               </div>
               <div className="mb-4">
@@ -270,7 +291,6 @@ const Rooms = () => {
                   value={newRoom.price}
                   onChange={handleInputChange}
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
                 />
               </div>
               <div className="mb-4">
@@ -286,9 +306,18 @@ const Rooms = () => {
                   onChange={handleInputChange}
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                   accept="image/*"
-                  required
                 />
               </div>
+
+              {error && (
+                <div className="p-2 bg-slate-100 mb-4">
+                  {error.split(", ").map((errorMessage, index) => (
+                    <p key={index} className="text-red-500 text-sm py-2">
+                      {errorMessage}
+                    </p>
+                  ))}
+                </div>
+              )}
               <div className="flex justify-end">
                 <button
                   type="button"

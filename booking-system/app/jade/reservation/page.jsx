@@ -110,7 +110,7 @@ const Reservations = () => {
         </h1>
         <div className="overflow-x-auto whitespace-nowrap">
           {reservations.length === 0 ? (
-            <p className="text-center py-12">No reservation.</p>
+            <p className="text-center py-12 text-red-500">No reservation.</p>
           ) : (
             <table className="min-w-full bg-white border border-gray-300 mt-4">
               <thead>
@@ -149,7 +149,7 @@ const Reservations = () => {
                       )}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      ${reservation.room.price}
+                      ₱ {reservation.room.price}
                     </td>
                     <td
                       className={`py-2 px-4 border-b font-semibold ${

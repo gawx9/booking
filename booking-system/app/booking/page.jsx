@@ -103,6 +103,7 @@ const Page = () => {
       const response = await axios.get("http://localhost:8080/api/rooms");
 
       setBookings(response.data);
+      // console.log(response.data);
 
       const token = localStorage.getItem("token");
 
@@ -175,7 +176,7 @@ const Page = () => {
                   className="w-full h-40 object-cover rounded-md mb-4"
                 />
               )}
-              <h3 className="text-xl font-bold mb-2">{booking.roomType}</h3>
+              <h3 className="text-xl font-bold mb-2">{booking.title}</h3>
               <p className="text-gray-600 mb-4">{booking.description}</p>
               <p className="text-lg font-bold text-blue-500">
                 ${booking.price}/night

@@ -1,3 +1,4 @@
+// Import necessary libraries
 "use client";
 import axios from "axios";
 import React, { useState } from "react";
@@ -6,23 +7,32 @@ import "react-datepicker/dist/react-datepicker.css";
 import { MdClose } from "react-icons/md";
 import Swal from "sweetalert2";
 
+// Define the BookingModal component
 const BookingModal = ({ handleCloseModal, roomId }) => {
+  // State for check-in and check-out dates
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
 
+  // Get the current date
+  const currentDate = new Date();
+
+  // Function to handle the booking process
   const handleBookNow = async () => {
     try {
+      // Check if a token is available
       const token = localStorage.getItem("token");
       if (!token) {
         return;
       }
 
+      // Prepare reservation data
       const reservationData = {
         roomId,
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
       };
 
+      // Make a reservation request to the server
       const response = await axios.post(
         "http://localhost:8080/api/reservation",
         reservationData,
@@ -59,7 +69,6 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
       // console.log(response.data);
     } catch (error) {
       console.error("Error booking reservation:", error);
-      // Handle error (e.g., display an error message to the user)
     }
   };
 
@@ -85,6 +94,7 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
             className="p-2 border border-gray-300 rounded-md w-full"
             dateFormat="dd/MM/yyyy"
             placeholderText="Check In"
+            minDate={currentDate} // Set minDate to the current date
           />
         </div>
         <div className="mb-4 flex flex-col">
@@ -95,7 +105,7 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
             selectsEnd
             startDate={checkInDate}
             endDate={checkOutDate}
-            minDate={checkInDate}
+            minDate={checkInDate || currentDate} // Set minDate based on checkInDate or current date
             className="p-2 border border-gray-300 rounded-md w-full"
             dateFormat="dd/MM/yyyy"
             placeholderText="Check Out"

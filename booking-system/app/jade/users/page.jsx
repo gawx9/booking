@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState("");
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -77,10 +78,12 @@ const Users = () => {
         email: "",
         password: "",
       });
+      setError("");
 
       fetchUsers();
     } catch (error) {
       console.log("Error adding user", error);
+      setError(error.response.data.message);
     }
   };
 
@@ -95,6 +98,7 @@ const Users = () => {
       email: "",
       password: "",
     });
+    setError("");
   };
 
   const handleInputChange = (e) => {
@@ -145,7 +149,7 @@ const Users = () => {
                         className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
                         onClick={() => handleDeleteUser(user._id)}
                       >
-                        Delete
+                        Delete User
                       </button>
                     </td>
                   </tr>
@@ -190,12 +194,22 @@ const Users = () => {
                 className="border rounded-md w-full p-2"
               />
             </label>
+
+            {error && (
+              <div className="p-2 bg-slate-100 mb-4">
+                {error.split(", ").map((errorMessage, index) => (
+                  <p key={index} className="text-red-500 text-sm py-2">
+                    {errorMessage}
+                  </p>
+                ))}
+              </div>
+            )}
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
                 onClick={handleSaveUser}
               >
-                Save
+                Add User
               </button>
               <button
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"

@@ -89,7 +89,10 @@ const ReservationModal = ({ reservation, onClose }) => {
           </div>
 
           {/* Modal footer with buttons */}
-          <div className="bg-gray-100 p-4 flex justify-end">
+          <div
+            id="printPageButton"
+            className="bg-gray-100 p-4 flex justify-end"
+          >
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
               onClick={() => window.print()}

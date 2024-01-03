@@ -5,6 +5,7 @@ import { nav_links } from "@/constants/admin";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import Access from "@/modals/Access";
+import { Toaster } from "react-hot-toast";
 
 export const handleLogout = () => {
   Swal.fire({
@@ -40,6 +41,8 @@ const Layout = ({ children }) => {
 
   return haveToken ? (
     <div>
+      <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
+
       <div className="bg-gray-500">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center">
