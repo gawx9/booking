@@ -35,7 +35,7 @@ app.use(cors());
 const userRoutes = require("./routes/user");
 const roomRoutes = require("./routes/room");
 const reservationRoutes = require("./routes/reservation");
-// Endpoints
+// Endpoints api
 app.use("/api", userRoutes);
 app.use("/api", roomRoutes);
 app.use("/api", reservationRoutes);
