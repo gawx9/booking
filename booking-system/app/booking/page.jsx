@@ -68,7 +68,7 @@ const Page = () => {
       }
 
       const response = await axios.get(
-        "https://jade-ka0u.onrender.com/api/reservations-user",
+        "http://localhost:8080/api/reservations-user",
         {
           headers: {
             Authorization: token,
@@ -101,9 +101,7 @@ const Page = () => {
   // Fetch bookings data from the API when the component mounts
   const fetchAllBookings = async () => {
     try {
-      const response = await axios.get(
-        "https://jade-ka0u.onrender.com/api/rooms"
-      );
+      const response = await axios.get("http://localhost:8080/api/rooms");
 
       setBookings(response.data);
       // console.log(response.data);
@@ -170,30 +168,31 @@ const Page = () => {
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {bookings.map((booking, i) => (
-            <div key={i} className="bg-white p-4 rounded-md shadow-md">
-              {booking.image && ( // Conditionally render the image if 'image' property exists
-                <Image
-                  src={`https://jade-ka0u.onrender.com/${booking.image}`}
-                  alt={`Room ${booking.roomType}`}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                  height={40}
-                  width={500}
-                />
-              )}
-              <h3 className="text-xl font-bold mb-2">{booking.title}</h3>
-              <p className="text-gray-600 mb-4">{booking.description}</p>
-              <p className="text-lg font-bold text-blue-500">
-                ${booking.price}/night
-              </p>
-              <button
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                onClick={() => handleOpenModal({ roomId: booking._id })}
-              >
-                Book Now
-              </button>
-            </div>
-          ))}
+          {bookings &&
+            bookings.map((booking, i) => (
+              <div key={i} className="bg-white p-4 rounded-md shadow-md">
+                {booking.image && ( // Conditionally render the image if 'image' property exists
+                  <Image
+                    src={`http://localhost:8080/${booking.image}`}
+                    alt={`Room ${booking.roomType}`}
+                    className="w-full h-40 object-cover rounded-md mb-4"
+                    height={40}
+                    width={500}
+                  />
+                )}
+                <h3 className="text-xl font-bold mb-2">{booking.title}</h3>
+                <p className="text-gray-600 mb-4">{booking.description}</p>
+                <p className="text-lg font-bold text-blue-500">
+                  ${booking.price}/night
+                </p>
+                <button
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  onClick={() => handleOpenModal({ roomId: booking._id })}
+                >
+                  Book Now
+                </button>
+              </div>
+            ))}
         </div>
       )}
 

@@ -13,7 +13,7 @@ const RegisterForm = ({ handleCloseRegisterForm, setOpenRegisterForm }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://jade-ka0u.onrender.com/api/register", newUser);
+      await axios.post("http://localhost:8080/api/register", newUser);
 
       setNewUser({
         name: "",

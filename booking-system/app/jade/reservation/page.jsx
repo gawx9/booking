@@ -20,7 +20,7 @@ const Reservations = () => {
   const fetchTransaction = async () => {
     try {
       const response = await axios.get(
-        "https://jade-ka0u.onrender.com/api/reservations"
+        "http://localhost:8080/api/reservations"
       );
       // console.log("Response Data", response.data);
       setReservations(response.data);
@@ -49,7 +49,7 @@ const Reservations = () => {
       if (result.isConfirmed) {
         // Send a request to delete the reservation
         await axios.delete(
-          `https://jade-ka0u.onrender.com/api/reservations/${reservationId}`
+          `http://localhost:8080/api/reservations/${reservationId}`
         );
 
         // Display a success message if the user confirms the action
@@ -83,7 +83,7 @@ const Reservations = () => {
   const handleConfirm = async (reservationId) => {
     try {
       await axios.put(
-        `https://jade-ka0u.onrender.com/api/reservations/${reservationId}/confirm`
+        `http://localhost:8080/api/reservations/${reservationId}/confirm`
       );
       fetchTransaction();
     } catch (error) {
@@ -94,7 +94,7 @@ const Reservations = () => {
   const handleCancel = async (reservationId) => {
     try {
       await axios.put(
-        `https://jade-ka0u.onrender.com/api/reservations/${reservationId}/cancel`
+        `http://localhost:8080/api/reservations/${reservationId}/cancel`
       );
       fetchTransaction();
     } catch (error) {
@@ -127,76 +127,77 @@ const Reservations = () => {
                 </tr>
               </thead>
               <tbody className="text-center">
-                {reservations.map((reservation, i) => (
-                  <tr key={i}>
-                    <td className="py-2 px-4 border-b">
-                      {reservation.user.name}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {new Date(reservation.checkIn).toLocaleDateString(
-                        "en-US"
-                      )}
-                    </td>
+                {reservations &&
+                  reservations.map((reservation, i) => (
+                    <tr key={i}>
+                      <td className="py-2 px-4 border-b">
+                        {reservation.user.name}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {new Date(reservation.checkIn).toLocaleDateString(
+                          "en-US"
+                        )}
+                      </td>
 
-                    <td className="py-2 px-4 border-b">
-                      {new Date(reservation.checkOut).toLocaleDateString(
-                        "en-US"
-                      )}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {new Date(reservation.createdAt).toLocaleDateString(
-                        "en-US"
-                      )}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      ₱ {reservation.room.price}
-                    </td>
-                    <td
-                      className={`py-2 px-4 border-b font-semibold ${
-                        reservation.status === "Pending"
-                          ? "text-yellow-500"
-                          : reservation.status === "Approved"
-                          ? "text-green-500"
-                          : reservation.status === "Canceled"
-                          ? "text-gray-500"
-                          : ""
-                      }`}
-                    >
-                      {reservation.status}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {reservation.status === "Pending" && (
-                        <>
-                          <button
-                            className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700 mr-2"
-                            onClick={() => handleConfirm(reservation._id)}
-                          >
-                            Confirm
-                          </button>
-                          <button
-                            className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-red-700 mr-2"
-                            onClick={() => handleCancel(reservation._id)}
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      )}
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 mr-2"
-                        onClick={() => handleDelete(reservation._id)}
+                      <td className="py-2 px-4 border-b">
+                        {new Date(reservation.checkOut).toLocaleDateString(
+                          "en-US"
+                        )}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {new Date(reservation.createdAt).toLocaleDateString(
+                          "en-US"
+                        )}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        ₱ {reservation.room.price}
+                      </td>
+                      <td
+                        className={`py-2 px-4 border-b font-semibold ${
+                          reservation.status === "Pending"
+                            ? "text-yellow-500"
+                            : reservation.status === "Approved"
+                            ? "text-green-500"
+                            : reservation.status === "Canceled"
+                            ? "text-gray-500"
+                            : ""
+                        }`}
                       >
-                        Delete
-                      </button>
+                        {reservation.status}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {reservation.status === "Pending" && (
+                          <>
+                            <button
+                              className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700 mr-2"
+                              onClick={() => handleConfirm(reservation._id)}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-red-700 mr-2"
+                              onClick={() => handleCancel(reservation._id)}
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        )}
+                        <button
+                          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 mr-2"
+                          onClick={() => handleDelete(reservation._id)}
+                        >
+                          Delete
+                        </button>
 
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700 mr-2"
-                        onClick={() => handleView(reservation)}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        <button
+                          className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700 mr-2"
+                          onClick={() => handleView(reservation)}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}

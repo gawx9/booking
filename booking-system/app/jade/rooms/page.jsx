@@ -33,9 +33,7 @@ const Rooms = () => {
 
       if (result.isConfirmed) {
         // Make API call to delete the room
-        await axios.delete(
-          `https://jade-ka0u.onrender.com/api/rooms/${roomId}`
-        );
+        await axios.delete(`http://localhost:8080/api/rooms/${roomId}`);
 
         // Display a success message if the user confirms the action
         await Swal.fire({
@@ -62,9 +60,7 @@ const Rooms = () => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get(
-        "https://jade-ka0u.onrender.com/api/rooms"
-      );
+      const response = await axios.get("http://localhost:8080/api/rooms");
       // console.log("Response Data after adding a room:", response.data);
       // console.log(response.data);
       setRooms(response.data);
@@ -86,7 +82,7 @@ const Rooms = () => {
       formData.append("image", newRoom.image);
 
       const response = await axios.post(
-        "https://jade-ka0u.onrender.com/api/rooms",
+        "http://localhost:8080/api/rooms",
         formData,
         {
           headers: {
@@ -182,37 +178,42 @@ const Rooms = () => {
                 </tr>
               </thead>
               <tbody className="text-center">
-                {rooms.map((room, i) => (
-                  <tr
-                    key={i}
-                    className={`${i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"}`}
-                  >
-                    <td className="py-2 px-4 border-b flex items-center justify-center">
-                      <Image
-                        src={`https://jade-ka0u.onrender.com/${room.image}`}
-                        alt={room.title}
-                        width={10}
-                        height={10}
-                        // className="h-10 w-10 object-cover"
-                      />
-                    </td>
-                    <td className="py-2 px-4 border-b">{room.title}</td>
-                    <td className="py-2 px-4 border-b">{room.accommodation}</td>
-                    <td className="py-2 px-4 border-b">{room.person}</td>
-                    <td className="py-2 px-4 border-b">
-                      ₱ {""}
-                      {room.price}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
-                        onClick={() => handleDelete(room._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {rooms &&
+                  rooms.map((room, i) => (
+                    <tr
+                      key={i}
+                      className={`${
+                        i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"
+                      }`}
+                    >
+                      <td className="py-2 px-4 border-b flex items-center justify-center">
+                        <Image
+                          src={`http://localhost:8080/${room.image}`}
+                          alt="Rooms"
+                          width={40}
+                          height={40}
+                          // className="h-10 w-10 object-cover"
+                        />
+                      </td>
+                      <td className="py-2 px-4 border-b">{room.title}</td>
+                      <td className="py-2 px-4 border-b">
+                        {room.accommodation}
+                      </td>
+                      <td className="py-2 px-4 border-b">{room.person}</td>
+                      <td className="py-2 px-4 border-b">
+                        ₱ {""}
+                        {room.price}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <button
+                          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
+                          onClick={() => handleDelete(room._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}
