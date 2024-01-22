@@ -68,7 +68,7 @@ const Page = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:8080/api/reservations-user",
+        "https://jade-ka0u.onrender.com/api/reservations-user",
         {
           headers: {
             Authorization: token,
@@ -101,7 +101,9 @@ const Page = () => {
   // Fetch bookings data from the API when the component mounts
   const fetchAllBookings = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/rooms");
+      const response = await axios.get(
+        "https://jade-ka0u.onrender.com/api/rooms"
+      );
 
       setBookings(response.data);
       // console.log(response.data);
@@ -172,7 +174,7 @@ const Page = () => {
             <div key={i} className="bg-white p-4 rounded-md shadow-md">
               {booking.image && ( // Conditionally render the image if 'image' property exists
                 <Image
-                  src={`http://localhost:8080/${booking.image}`}
+                  src={`https://jade-ka0u.onrender.com/${booking.image}`}
                   alt={`Room ${booking.roomType}`}
                   className="w-full h-40 object-cover rounded-md mb-4"
                   height={40}

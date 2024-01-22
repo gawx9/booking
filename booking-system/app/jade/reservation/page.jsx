@@ -20,7 +20,7 @@ const Reservations = () => {
   const fetchTransaction = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/reservations"
+        "https://jade-ka0u.onrender.com/api/reservations"
       );
       // console.log("Response Data", response.data);
       setReservations(response.data);
@@ -49,7 +49,7 @@ const Reservations = () => {
       if (result.isConfirmed) {
         // Send a request to delete the reservation
         await axios.delete(
-          `http://localhost:8080/api/reservations/${reservationId}`
+          `https://jade-ka0u.onrender.com/api/reservations/${reservationId}`
         );
 
         // Display a success message if the user confirms the action
@@ -83,7 +83,7 @@ const Reservations = () => {
   const handleConfirm = async (reservationId) => {
     try {
       await axios.put(
-        `http://localhost:8080/api/reservations/${reservationId}/confirm`
+        `https://jade-ka0u.onrender.com/api/reservations/${reservationId}/confirm`
       );
       fetchTransaction();
     } catch (error) {
@@ -94,7 +94,7 @@ const Reservations = () => {
   const handleCancel = async (reservationId) => {
     try {
       await axios.put(
-        `http://localhost:8080/api/reservations/${reservationId}/cancel`
+        `https://jade-ka0u.onrender.com/api/reservations/${reservationId}/cancel`
       );
       fetchTransaction();
     } catch (error) {

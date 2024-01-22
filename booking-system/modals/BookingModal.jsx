@@ -34,7 +34,7 @@ const BookingModal = ({ handleCloseModal, roomId }) => {
 
       // Make a reservation request to the server
       const response = await axios.post(
-        "http://localhost:8080/api/reservation",
+        "https://jade-ka0u.onrender.com/api/reservation",
         reservationData,
         {
           headers: {

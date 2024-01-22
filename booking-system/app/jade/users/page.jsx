@@ -16,7 +16,9 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/users");
+      const response = await axios.get(
+        "https://jade-ka0u.onrender.com/api/users"
+      );
       // console.log("Response Data", response.data);
       setUsers(response.data);
     } catch (error) {
@@ -43,7 +45,9 @@ const Users = () => {
 
       if (result.isConfirmed) {
         // Make API call to delete the user
-        await axios.delete(`http://localhost:8080/api/users/${userId}`);
+        await axios.delete(
+          `https://jade-ka0u.onrender.com/api/users/${userId}`
+        );
 
         // Display a success message if the user confirms the action
         await Swal.fire({
@@ -70,7 +74,7 @@ const Users = () => {
 
   const handleSaveUser = async () => {
     try {
-      await axios.post("http://localhost:8080/api/register", newUser);
+      await axios.post("https://jade-ka0u.onrender.com/api/register", newUser);
 
       setIsModalOpen(false);
       setNewUser({
