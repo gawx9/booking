@@ -55,6 +55,7 @@ export const socials = [
   },
 ];
 
+// Sample data
 export const servicesData = [
   {
     title: "Room and Apartments",
