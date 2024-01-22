@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 
+// Logout Function
 export const handleLogout = () => {
   Swal.fire({
     title: "Are you sure?",
