@@ -16,6 +16,7 @@ import { handleLogout } from "@/utils/logout";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,7 +53,7 @@ const Page = () => {
       router.push("/");
     }
     // console.log(token);
-  }, []);
+  }, [router]);
   const handleOpenModal = ({ roomId }) => {
     setIsModalOpen(true);
     setRoomId(roomId); // Set roomId in state
@@ -119,7 +120,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchAllBookings();
-  }, []);
+  }, [bookings]);
 
   return (
     <div className="container mx-auto mt-8">
@@ -170,10 +171,12 @@ const Page = () => {
           {bookings.map((booking, i) => (
             <div key={i} className="bg-white p-4 rounded-md shadow-md">
               {booking.image && ( // Conditionally render the image if 'image' property exists
-                <img
+                <Image
                   src={`http://localhost:8080/${booking.image}`}
                   alt={`Room ${booking.roomType}`}
                   className="w-full h-40 object-cover rounded-md mb-4"
+                  height={40}
+                  width={500}
                 />
               )}
               <h3 className="text-xl font-bold mb-2">{booking.title}</h3>

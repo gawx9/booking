@@ -4,6 +4,7 @@ import Layout from "../layout/page";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Image from "next/image";
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -183,10 +184,12 @@ const Rooms = () => {
                     className={`${i % 2 === 0 ? "bg-gray-200" : "bg-gray-100"}`}
                   >
                     <td className="py-2 px-4 border-b flex items-center justify-center">
-                      <img
+                      <Image
                         src={`http://localhost:8080/${room.image}`}
                         alt={room.title}
-                        className="h-10 w-10 object-cover"
+                        width={10}
+                        height={10}
+                        // className="h-10 w-10 object-cover"
                       />
                     </td>
                     <td className="py-2 px-4 border-b">{room.title}</td>
