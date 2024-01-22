@@ -122,7 +122,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchAllBookings();
-  }, [bookings]);
+  }, []);
 
   return (
     <div className="container mx-auto mt-8">
