@@ -10,8 +10,8 @@ const ContactUs = () => {
               We'd love to hear from you. If you have any questions or
               inquiries, feel free to reach out to us.
             </p>
-            <p className="text-gray-700 mb-4">Email: info@example.com</p>
-            <p className="text-gray-700">Phone: +1 (123) 456-7890</p>
+            <p className="text-gray-700 mb-4">Email: jadegarden@gmail.com</p>
+            <p className="text-gray-700">Phone: 09091280365</p>
           </div>
           <div>
             <h3 className="text-xl font-bold mb-4">Visit Us</h3>
@@ -19,8 +19,9 @@ const ContactUs = () => {
               Stop by our office during business hours. We look forward to
               meeting you!
             </p>
-            <p className="text-gray-700">123 Main Street</p>
-            <p className="text-gray-700">Cityville, State, 12345</p>
+            <p className="text-gray-700">
+              Nibaliw Narvarte, San Fabian, Pangasinan
+            </p>
           </div>
         </div>
       </div>

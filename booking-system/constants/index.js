@@ -2,17 +2,7 @@ import Slide1 from "/public/slide1.jpg";
 import Slide2 from "/public/slide2.jpg";
 import Slide3 from "/public/slide3.jpg";
 import Slide4 from "/public/slide4.jpg";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaBed,
-  FaUtensils,
-  FaSpa,
-  FaGamepad,
-  FaBirthdayCake,
-  FaDumbbell,
-} from "react-icons/fa";
+
 export const nav_bar = [
   {
     title: "Home",
@@ -43,50 +33,25 @@ export const slides = [
   },
 ];
 
-export const socials = [
-  {
-    icon: <FaFacebook size={25} />,
-  },
-  {
-    icon: <FaTwitter size={25} />,
-  },
-  {
-    icon: <FaInstagram size={25} />,
-  },
-];
-
 // Sample data
 export const servicesData = [
   {
-    title: "Room and Apartments",
-    description: "Luxurious rooms and apartments for a comfortable stay",
-    icon: <FaBed size={36} />,
+    title: "Mathews Restaurant",
   },
   {
-    title: "Food And Restaurant",
-    description: "Delicious cuisine served in our top-notch restaurant",
-    icon: <FaUtensils size={36} />,
+    title: "G Avenue",
   },
   {
-    title: "Spa and Fitness",
-    description:
-      "Relaxing spa treatments and state-of-the-art fitness facilities",
-    icon: <FaSpa size={36} />,
+    title: "Konsi's Plate",
   },
   {
-    title: "Sports and Gaming",
-    description: "Engage in various sports and gaming activities",
-    icon: <FaGamepad size={36} />,
+    title: "Seven eleven",
   },
   {
-    title: "Event and Party",
-    description: "Host your events and parties in our versatile spaces",
-    icon: <FaBirthdayCake size={36} />,
+    title: "Puregold",
   },
   {
-    title: "Gym and Yoga",
-    description: "Stay fit with our well-equipped gym and yoga sessions",
-    icon: <FaDumbbell size={36} />,
+    title: "CSI Mall",
   },
 ];
 

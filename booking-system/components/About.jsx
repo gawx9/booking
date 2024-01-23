@@ -12,13 +12,10 @@ const About = () => {
             Amazing Hotel in front of the sea.
           </h2>
           <p className="text-sm text-gray-600 py-2">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt, ab
-            optio, neque modi ut dolores nam officiis soluta mollitia quos illo
-            delectus qui, nesciunt labore?
+            Discover the perfect blend of luxury and tranquility at our beach
+            resort, where each tide carries away your worries and leaves behind
+            memories of pure bliss.
           </p>
-          <button className="bg-blue-500 text-white px-12 py-2 rounded w-44">
-            See more
-          </button>
         </div>
         <div>
           <Carousel>
